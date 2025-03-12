@@ -1,10 +1,12 @@
+using UnityEditor;
 using UnityEngine;
 
 public class ActionUnit : SelectableUnit
 {
     private SpriteRenderer spriteRenderer;
     [SerializeField] private Color highlightColor;
-    private SelectableUnit currentTile;
+    [SerializeField] private UnitType unitType;
+    [SerializeField] private Stats stats;
     private int tileX, tileY;
 
     private Color initialColor;
@@ -23,7 +25,7 @@ public class ActionUnit : SelectableUnit
 
     private void OnMouseEnter()
     {
-        spriteRenderer.color = highlightColor;
+        EnableHighlight();
     }
 
     private void OnMouseExit()
@@ -37,7 +39,17 @@ public class ActionUnit : SelectableUnit
     override protected void OnMouseDown()
     {
         isSelected = true;
-        gridManager.UnitSelected(this.x,this.y,UnitType.PLAYER);
+        gridManager.UnitSelected(this.x,this.y,this.unitType);
+    }
+
+    public override void DisableHighlight()
+    {
+        spriteRenderer.color = initialColor;
+    }
+
+    override public void EnableHighlight()
+    {
+        spriteRenderer.color = highlightColor;
     }
 
     override public void deselect()
@@ -45,8 +57,17 @@ public class ActionUnit : SelectableUnit
         isSelected = false;
     }
 
-    public void Move(Vector3 destination)
+    public void Move(Vector3 destination, int x, int y)
     {
         this.transform.position = destination;
+        SetTilePosition(x, y);
+    }
+
+    public int GetTileX()
+    {
+        return tileX;
+    }
+    public int GetTileY() {
+        return tileY;
     }
 }

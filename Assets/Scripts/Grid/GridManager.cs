@@ -7,6 +7,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Tile tilePrefab;
     [SerializeField] private Transform camera;
     [SerializeField] private GameObject player;
+    [SerializeField] private GameObject enemy;
     [SerializeField] private BattleController battleController;
 
     private const float tileSize = 1.0f;
@@ -15,13 +16,14 @@ public class GridManager : MonoBehaviour
 
 
     private ActionUnit playerUnit;
+    private ActionUnit enemyUnit;
 
 
     private void Start()
     {
         map = new SelectableUnit[_width][];
         GenerateGrid();
-        AddPlayerToSelectableUnits();
+        AddPlayerAndEnemyToSelectableUnits();
     }
     void GenerateGrid()
     {
@@ -44,12 +46,15 @@ public class GridManager : MonoBehaviour
         SelectableUnit firstTile = map[0][0];
         camera.transform.position = new Vector3((float)_width / 2 - tileSize / 2, (float)_height - tileSize / 2,-10);
         player.transform.position = new Vector3(firstTile.transform.position.x, firstTile.transform.position.y, 0);
+        enemy.transform.position = new Vector3(map[_width - 1][_height - 1].transform.position.x, map[_width - 1][_height - 1].transform.position.y, 0);
         player.GetComponent<ActionUnit>().SetTilePosition(0,0);
+        enemy.GetComponent<ActionUnit>().SetTilePosition(_width - 1, _height - 1);
     }
 
-    private void AddPlayerToSelectableUnits()
+    private void AddPlayerAndEnemyToSelectableUnits()
     {
         playerUnit = player.GetComponent<ActionUnit>();
+        enemyUnit = enemy.GetComponent<ActionUnit>();
     }
 
     private SelectableUnit GetSelectableUnitAtPosition(int x, int y)
@@ -71,7 +76,34 @@ public class GridManager : MonoBehaviour
                     battleController.TileUnitSelected(GetSelectableUnitAtPosition(x,y));
                     break;
                 }
+            case UnitType.ENEMY:
+                {
+                    battleController.ActionUnitSelected(enemyUnit);
+                    break;
+                }
         }
         
+    }
+
+    public void HighLightMoveableArea(int x, int y)
+    {
+        for (int i = x-6 < 0 ? 0 : x-6; i <= x+6 && i < _width; i++)
+        {
+            for (int j = y-6 < 0 ? 0 : y-6; j <= y+6 && j< _height; j++)
+            {
+                map[i][j].EnableHighlight();
+            }
+        }
+    }
+
+    public void ClearAllHighlightedArea(int x, int y)
+    {
+        for (int i = x - 6 < 0 ? 0 : x - 6; i <= x + 6 && i < _width; i++)
+        {
+            for (int j = y - 6 < 0 ? 0 : y - 6; j <= y + 6 && j < _height; j++)
+            {
+                map[i][j].DisableHighlight();
+            }
+        }
     }
 }

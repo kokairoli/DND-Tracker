@@ -36,6 +36,18 @@ public class SelectableUnit : MonoBehaviour
         }
     }
 
+    virtual public void DisableHighlight()
+    {
+        highlight.SetActive(false);
+        isSelected = false;
+    }
+
+    virtual public void EnableHighlight()
+    {
+        highlight.SetActive(true);
+        isSelected = true;
+    }
+
     virtual protected void OnMouseDown()
     {
         isSelected = true;

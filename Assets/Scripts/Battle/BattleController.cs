@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class BattleController : MonoBehaviour
 {
+    [SerializeField] private GridManager gridManager;
     private ActionUnit selectedUnit;
     private SelectableUnit selectedTile;
     private SelectableUnit destinationTile;
@@ -15,7 +16,8 @@ public class BattleController : MonoBehaviour
         {
             //Mozgás a kijelölt egységhez
             destinationTile = unit;
-            selectedUnit.Move(new Vector3(unit.transform.position.x, unit.transform.position.y, 0));
+            gridManager.ClearAllHighlightedArea(selectedUnit.GetTileX(), selectedUnit.GetTileY());
+            selectedUnit.Move(new Vector3(unit.transform.position.x, unit.transform.position.y, 0),destinationTile.x,destinationTile.y);
             ClearTileSelection();
             ClearUnitSelection();
         }
@@ -38,15 +40,18 @@ public class BattleController : MonoBehaviour
         if (!selectedUnit)
         {
             selectedUnit = unit;
+            gridManager.HighLightMoveableArea(selectedUnit.GetTileX(), selectedUnit.GetTileY());
         }
         else if(selectedUnit.Equals(unit))
         {
             selectedUnit.deselect();
+            gridManager.ClearAllHighlightedArea(selectedUnit.GetTileX(), selectedUnit.GetTileY());
             selectedUnit = null;
         }
         else
         {
             destinationUnit = unit;
+            gridManager.ClearAllHighlightedArea(selectedUnit.GetTileX(), selectedUnit.GetTileY());
             //Ide a logika jön, hogy mi történjen, ha két egység van kijelölve
         }
     }
