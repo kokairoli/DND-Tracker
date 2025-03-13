@@ -52,7 +52,12 @@ public class BattleController : MonoBehaviour
         {
             destinationUnit = unit;
             gridManager.ClearAllHighlightedArea(selectedUnit.GetTileX(), selectedUnit.GetTileY());
+            selectedUnit.deselect();
             //Ide a logika jön, hogy mi történjen, ha két egység van kijelölve
+            selectedUnit.Attack(destinationUnit);
+            selectedUnit = null;
+            destinationUnit.deselect();
+            destinationUnit = null;
         }
     }
 

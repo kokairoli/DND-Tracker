@@ -55,6 +55,7 @@ public class ActionUnit : SelectableUnit
     override public void deselect()
     {
         isSelected = false;
+        DisableHighlight();
     }
 
     public void Move(Vector3 destination, int x, int y)
@@ -69,5 +70,15 @@ public class ActionUnit : SelectableUnit
     }
     public int GetTileY() {
         return tileY;
+    }
+
+    public void Attack(ActionUnit target)
+    {
+        target.TakeDamage(stats.GetAttackPower());
+    }
+
+    public void TakeDamage(int damage)
+    {
+        stats.TakeDamage(damage);
     }
 }
