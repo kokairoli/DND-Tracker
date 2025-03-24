@@ -14,7 +14,10 @@ public class SelectableUnit : MonoBehaviour
 
     private void Start()
     {
-        gridManager = GetComponentInParent<GridManager>();
+        if (gridManager == null)
+        {
+            gridManager = GetComponentInParent<GridManager>();
+        }
     }
 
     private void OnMouseEnter()

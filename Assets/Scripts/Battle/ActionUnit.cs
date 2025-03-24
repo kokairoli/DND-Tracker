@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ActionUnit : SelectableUnit
 {
-    private SpriteRenderer spriteRenderer;
+    [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Color highlightColor;
     [SerializeField] private UnitType unitType;
     [SerializeField] private Stats stats;
@@ -13,7 +13,6 @@ public class ActionUnit : SelectableUnit
 
     private void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
         initialColor = spriteRenderer.color;
     }
 
@@ -58,6 +57,12 @@ public class ActionUnit : SelectableUnit
         DisableHighlight();
     }
 
+    public void Select()
+    {
+        isSelected = true;
+        EnableHighlight();
+    }
+
     public void Move(Vector3 destination, int x, int y)
     {
         this.transform.position = destination;
@@ -81,4 +86,25 @@ public class ActionUnit : SelectableUnit
     {
         stats.TakeDamage(damage);
     }
+
+    public int RollInitiative()
+    {
+        return DiceController.RollDice(DiceType.D20);
+    }
+
+    public int getMovement()
+    {
+        return stats.GetCurrentMovement();
+    }
+
+    public void SubstractDistanceFromMovement(int distance)
+    {
+        stats.SubstractDistance(distance);
+    }
+
+    public void ResetResources()
+    {
+        stats.ResetResources();
+    }
+
 }

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
@@ -12,7 +14,7 @@ public class GridManager : MonoBehaviour
 
     private const float tileSize = 1.0f;
 
-    private SelectableUnit[][] map;
+    private Tile[][] map;
 
 
     private ActionUnit playerUnit;
@@ -21,15 +23,15 @@ public class GridManager : MonoBehaviour
 
     private void Start()
     {
-        map = new SelectableUnit[_width][];
-        GenerateGrid();
+        map = new Tile[_width][];
         AddPlayerAndEnemyToSelectableUnits();
+        GenerateGrid();
     }
     void GenerateGrid()
     {
         for (int x = 0; x < _width; x++)
         {
-            map[x] = new SelectableUnit[_height];
+            map[x] = new Tile[_height];
             for (int y = 0; y < _height; y++)
             {
                 Tile spawnedTile = Instantiate(tilePrefab, new Vector3(x, y, 0), Quaternion.identity);
@@ -47,8 +49,8 @@ public class GridManager : MonoBehaviour
         camera.transform.position = new Vector3((float)_width / 2 - tileSize / 2, (float)_height - tileSize / 2,-10);
         player.transform.position = new Vector3(firstTile.transform.position.x, firstTile.transform.position.y, 0);
         enemy.transform.position = new Vector3(map[_width - 1][_height - 1].transform.position.x, map[_width - 1][_height - 1].transform.position.y, 0);
-        player.GetComponent<ActionUnit>().SetTilePosition(0,0);
-        enemy.GetComponent<ActionUnit>().SetTilePosition(_width - 1, _height - 1);
+        playerUnit.SetTilePosition(0,0);
+        enemyUnit.SetTilePosition(_width - 1, _height - 1);
     }
 
     private void AddPlayerAndEnemyToSelectableUnits()
@@ -58,6 +60,11 @@ public class GridManager : MonoBehaviour
     }
 
     private SelectableUnit GetSelectableUnitAtPosition(int x, int y)
+    {
+        return map[x][y];
+    }
+
+    private Tile GetTileAtPosition(int x, int y)
     {
         return map[x][y];
     }
@@ -73,7 +80,7 @@ public class GridManager : MonoBehaviour
                 }
             case UnitType.TILE:
                 {
-                    battleController.TileUnitSelected(GetSelectableUnitAtPosition(x,y));
+                    battleController.TileUnitSelected(GetTileAtPosition(x,y));
                     break;
                 }
             case UnitType.ENEMY:
@@ -85,25 +92,36 @@ public class GridManager : MonoBehaviour
         
     }
 
-    public void HighLightMoveableArea(int x, int y)
+    public void HighLightMoveableArea(int x, int y,int movePoints)
     {
-        for (int i = x-6 < 0 ? 0 : x-6; i <= x+6 && i < _width; i++)
+        for (int i = x-movePoints < 0 ? 0 : x-movePoints; i <= x+movePoints && i < _width; i++)
         {
-            for (int j = y-6 < 0 ? 0 : y-6; j <= y+6 && j< _height; j++)
+            for (int j = y-movePoints < 0 ? 0 : y-movePoints; j <= y+movePoints && j< _height; j++)
             {
                 map[i][j].EnableHighlight();
             }
         }
     }
 
-    public void ClearAllHighlightedArea(int x, int y)
+    public void ClearAllHighlightedArea(int x, int y, int movePoints)
     {
-        for (int i = x - 6 < 0 ? 0 : x - 6; i <= x + 6 && i < _width; i++)
+        for (int i = x - movePoints < 0 ? 0 : x - movePoints; i <= x + movePoints && i < _width; i++)
         {
-            for (int j = y - 6 < 0 ? 0 : y - 6; j <= y + 6 && j < _height; j++)
+            for (int j = y - movePoints < 0 ? 0 : y - movePoints; j <= y + movePoints && j < _height; j++)
             {
                 map[i][j].DisableHighlight();
             }
         }
+    }
+
+    public bool IsInReachDistance(ActionUnit start,SelectableUnit destiantion)
+    {
+        return CalculateDistance(start.GetTileX(), start.GetTileY(), destiantion.x, destiantion.y) <= start.getMovement();
+    }
+
+    public int CalculateDistance(int startX, int startY, int destX, int destY)
+    {
+        double distance = Math.Sqrt(Math.Pow(destX - startX, 2) + Math.Pow(destY - startY, 2));
+        return (int)Math.Round(distance);
     }
 }
