@@ -107,4 +107,9 @@ public class ActionUnit : SelectableUnit
         stats.ResetResources();
     }
 
+    public int GetAttackRange()
+    {
+        return stats.GetAttackRange();
+    }
+
 }

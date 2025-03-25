@@ -60,6 +60,7 @@ public class Stats : MonoBehaviour
     [SerializeField] private int attackPower;
     public HealthBar healthBar;
     private Resources resources;
+    private int attackRange = 1;
 
     private void Start()
     {
@@ -82,6 +83,11 @@ public class Stats : MonoBehaviour
     public int GetAttackPower()
     {
         return attackPower;
+    }
+
+    public int GetAttackRange()
+    {
+        return attackRange;
     }
 
     void attack(Stats target)

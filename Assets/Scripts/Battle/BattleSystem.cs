@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public enum BattleState
 {
+    PREPARE,
     START,
     WON,
     LOST
@@ -11,26 +12,36 @@ public enum BattleState
 public class BattleSystem : MonoBehaviour
 {
     [SerializeField] BattleController battleController;
+    [SerializeField] UIController uiController;
     public BattleState state;
     private int currentUnitInTurnIndex;
-    private int currentTurn = 0;
+    private int currentTurn = 1;
     SortedList<int, ActionUnit> units = new SortedList<int, ActionUnit>();
 
     void Start()
     {
-        state = BattleState.START;
+        state = BattleState.PREPARE;
         DecideTurnOrder();
         currentUnitInTurnIndex = 0;
+        UpdateTurnCountText();
         CommenceBattle();
 
     }
 
     private void DecideTurnOrder()
     {
+        //TODO: Update
         ActionUnit[] actionUnits = FindObjectsByType<ActionUnit>(FindObjectsSortMode.None);
+        int roll;
         foreach (ActionUnit unit in actionUnits)
         {
-            units.Add(unit.RollInitiative(), unit);
+            do
+            {
+                roll = unit.RollInitiative();
+            } while (units.ContainsKey(roll));
+            
+            units.Add(roll, unit);
+            
         }
     }
 
@@ -50,10 +61,18 @@ public class BattleSystem : MonoBehaviour
         {
             currentUnitInTurnIndex = 0;
             currentTurn++;
+            UpdateTurnCountText();
         }
+        battleController.ClearAllHighlightedArea();
         battleController.ClearUnitSelection();
         battleController.ClearTileSelection();
         battleController.ResetSelectedUnitResources();
+        battleController.SetInspectAction();
         CommenceBattle();
+    }
+
+    private void UpdateTurnCountText()
+    {
+        uiController.SetTurnCounter(currentTurn);
     }
 }

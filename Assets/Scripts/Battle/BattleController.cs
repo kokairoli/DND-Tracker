@@ -19,6 +19,11 @@ public class BattleController : MonoBehaviour
     private Action currentAction = Action.INSPECT;
 
 
+
+    private void Start()
+    {
+        UpdateCurrentActionToText();
+    }
     public void TileUnitSelected(Tile unit)
     {
         switch (currentAction)
@@ -56,15 +61,13 @@ public class BattleController : MonoBehaviour
         {
             Debug.Log("Cannot attack self");
         }
-        else if(gridManager.IsInReachDistance(selectedUnit, target))
+        else if(gridManager.IsInAttackRange(selectedUnit, target))
         {
-            Debug.Log("Attacking...");
             destinationUnit = target;
-            gridManager.ClearAllHighlightedArea(selectedUnit.GetTileX(), selectedUnit.GetTileY(), selectedUnit.getMovement());
+            ClearHighLightOfAttackableArea();
             //Ide a logika jön, hogy mi történjen, ha két egység van kijelölve
             selectedUnit.Attack(destinationUnit);
-            destinationUnit.deselect();
-            destinationUnit = null;
+            ClearUnitSelection();
         }
     }
 
@@ -74,13 +77,12 @@ public class BattleController : MonoBehaviour
         {
             //Mozgás a kijelölt egységhez
             destinationTile = target;
-            gridManager.ClearAllHighlightedArea(selectedUnit.GetTileX(), selectedUnit.GetTileY(), selectedUnit.getMovement());
+            ClearHighLightOfMoveableArea();
             int distance = gridManager.CalculateDistance(selectedUnit.GetTileX(), selectedUnit.GetTileY(), destinationTile.x, destinationTile.y);
             selectedUnit.Move(new Vector3(target.transform.position.x, target.transform.position.y, 0), destinationTile.x, destinationTile.y);
             selectedUnit.SubstractDistanceFromMovement(distance);
-            CreateTextAtCursor("Moving...");
+            HighLightMoveableArea();
             ClearTileSelection();
-            ClearUnitSelection();
         }
         else
         {
@@ -128,27 +130,34 @@ public class BattleController : MonoBehaviour
 
     public void SetAttackAction()
     {
+        ClearAllHighlightedArea();
         ClearTileSelection();
         ClearUnitSelection();
         currentAction = Action.ATTACK;
-        gridManager.HighLightMoveableArea(selectedUnit.GetTileX(), selectedUnit.GetTileY(), selectedUnit.getMovement());
+        UpdateCurrentActionToText();
+        HighLightAttackableArea();
     }
 
     public void SetMoveAction()
     {
+        ClearAllHighlightedArea();
         ClearTileSelection();
         ClearUnitSelection();
         currentAction = Action.MOVE;
-        gridManager.HighLightMoveableArea(selectedUnit.GetTileX(), selectedUnit.GetTileY(), selectedUnit.getMovement());
+        UpdateCurrentActionToText();
+        HighLightMoveableArea();
         
     }
 
     public void SetInspectAction()
     {
+        ClearAllHighlightedArea();
         ClearTileSelection();
         ClearUnitSelection();
         currentAction = Action.INSPECT;
-        
+        UpdateCurrentActionToText();
+
+
     }
 
     public void ResetSelectedUnitResources()
@@ -159,6 +168,37 @@ public class BattleController : MonoBehaviour
     public void CreateTextAtCursor(string text)
     {
         uiController.CreateFloatingText(new Vector3(selectedUnit.transform.position.x, selectedUnit.transform.position.y,-1),text);
+    }
+
+    private void HighLightMoveableArea()
+    {
+        gridManager.HighLightMoveableArea(selectedUnit.GetTileX(), selectedUnit.GetTileY(), selectedUnit.getMovement());
+    }
+
+    private void HighLightAttackableArea()
+    {
+        gridManager.HighLightMoveableArea(selectedUnit.GetTileX(), selectedUnit.GetTileY(), selectedUnit.GetAttackRange());
+    }
+
+    private void ClearHighLightOfMoveableArea()
+    {
+        gridManager.ClearAllHighlightedArea(selectedUnit.GetTileX(), selectedUnit.GetTileY(), selectedUnit.getMovement());
+    }
+
+    private void ClearHighLightOfAttackableArea()
+    {
+        gridManager.ClearAllHighlightedArea(selectedUnit.GetTileX(), selectedUnit.GetTileY(), selectedUnit.GetAttackRange());
+    }
+
+    public void ClearAllHighlightedArea()
+    {
+        ClearHighLightOfAttackableArea();
+        ClearHighLightOfMoveableArea();
+    }
+
+    private void UpdateCurrentActionToText()
+    {
+        uiController.SetActionText(currentAction);
     }
 
 }
