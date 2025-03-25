@@ -8,23 +8,23 @@ public class GridManager : MonoBehaviour
     [SerializeField] private int _width, _height;
     [SerializeField] private Tile tilePrefab;
     [SerializeField] private Transform camera;
-    [SerializeField] private GameObject player;
-    [SerializeField] private GameObject enemy;
     [SerializeField] private BattleController battleController;
+    [SerializeField] private BattleSystem battleSystem;
+    [SerializeField] private UIController uiController;
+
+
+    private List<GameObject> unitsOnMap = new List<GameObject>();
 
     private const float tileSize = 1.0f;
 
     private Tile[][] map;
 
 
-    private ActionUnit playerUnit;
-    private ActionUnit enemyUnit;
 
 
     private void Start()
     {
         map = new Tile[_width][];
-        AddPlayerAndEnemyToSelectableUnits();
         GenerateGrid();
     }
     void GenerateGrid()
@@ -45,18 +45,17 @@ public class GridManager : MonoBehaviour
                 spawnedTile.SetPosition(x, y);
             }
         }
-        SelectableUnit firstTile = map[0][0];
         camera.transform.position = new Vector3((float)_width / 2 - tileSize / 2, (float)_height - tileSize / 2,-10);
-        player.transform.position = new Vector3(firstTile.transform.position.x, firstTile.transform.position.y, 0);
-        enemy.transform.position = new Vector3(map[_width - 1][_height - 1].transform.position.x, map[_width - 1][_height - 1].transform.position.y, 0);
-        playerUnit.SetTilePosition(0,0);
-        enemyUnit.SetTilePosition(_width - 1, _height - 1);
+        
     }
 
-    private void AddPlayerAndEnemyToSelectableUnits()
+    private void PlaceUnitOnMap(int x, int y,GameObject unitObject)
     {
-        playerUnit = player.GetComponent<ActionUnit>();
-        enemyUnit = enemy.GetComponent<ActionUnit>();
+        Tile tile = map[x][y];
+        tile.SetIsSelected(false);
+        unitObject.transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y, 0);
+        unitObject.GetComponent<ActionUnit>().SetTilePosition(x, y);
+        unitsOnMap.Add(unitObject);
     }
 
     private SelectableUnit GetSelectableUnitAtPosition(int x, int y)
@@ -73,23 +72,38 @@ public class GridManager : MonoBehaviour
     {
         switch (type)
         {
-            case UnitType.PLAYER:
+            case UnitType.ACTION_UNIT:
                 {
-                    battleController.ActionUnitSelected(playerUnit);
+                    if (battleSystem.GetBattleState() != BattleState.PREPARE)
+                    {
+                        ActionUnit unit = unitsOnMap.Find(unitsOnMap => unitsOnMap.GetComponent<ActionUnit>().GetTileX() == x && unitsOnMap.GetComponent<ActionUnit>().GetTileY() == y).GetComponent<ActionUnit>();
+                        if (unit)
+                        {
+                            battleController.ActionUnitSelected(unit);
+                        }
+                    }
                     break;
                 }
             case UnitType.TILE:
                 {
-                    battleController.TileUnitSelected(GetTileAtPosition(x,y));
-                    break;
-                }
-            case UnitType.ENEMY:
-                {
-                    battleController.ActionUnitSelected(enemyUnit);
+                    if (battleSystem.GetBattleState() == BattleState.PREPARE)
+                    {
+                        GameObject unit = Instantiate(uiController.GetComponent<UnitCreationUIController>().GetSelectedPrefab());
+                        PlaceUnitOnMap(x, y, unit);
+                    }
+                    else
+                    {
+                        battleController.TileUnitSelected(GetTileAtPosition(x, y));
+                    }
                     break;
                 }
         }
         
+    }
+
+    public void AddPreparedUnitsToBattleSystem()
+    {
+        battleSystem.PrepareAndDecideTurnOrder(unitsOnMap);
     }
 
     public void HighLightMoveableArea(int x, int y,int movePoints)

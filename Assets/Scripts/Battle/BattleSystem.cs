@@ -14,26 +14,28 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] BattleController battleController;
     [SerializeField] UIController uiController;
     public BattleState state;
-    private int currentUnitInTurnIndex;
+    private int currentUnitInTurnIndex = 0;
     private int currentTurn = 1;
+    List<ActionUnit> preparedUnits = new List<ActionUnit>();
     SortedList<int, ActionUnit> units = new SortedList<int, ActionUnit>();
 
     void Start()
     {
         state = BattleState.PREPARE;
-        DecideTurnOrder();
-        currentUnitInTurnIndex = 0;
-        UpdateTurnCountText();
-        CommenceBattle();
-
     }
 
-    private void DecideTurnOrder()
+    public void PrepareAndDecideTurnOrder(List<GameObject> actionUnitObjects)
     {
         //TODO: Update
-        ActionUnit[] actionUnits = FindObjectsByType<ActionUnit>(FindObjectsSortMode.None);
+        uiController.DisableStartBattleAndAddUnitButton();
+        state = BattleState.START;
+        actionUnitObjects.ForEach(unitObject =>
+        {
+            preparedUnits.Add(unitObject.GetComponent<ActionUnit>());
+        });
+        UpdateTurnCountText();
         int roll;
-        foreach (ActionUnit unit in actionUnits)
+        foreach (ActionUnit unit in preparedUnits)
         {
             do
             {
@@ -43,6 +45,8 @@ public class BattleSystem : MonoBehaviour
             units.Add(roll, unit);
             
         }
+
+        CommenceBattle();
     }
 
     void CommenceBattle()
@@ -69,6 +73,11 @@ public class BattleSystem : MonoBehaviour
         battleController.ResetSelectedUnitResources();
         battleController.SetInspectAction();
         CommenceBattle();
+    }
+
+    public BattleState GetBattleState()
+    {
+        return state;
     }
 
     private void UpdateTurnCountText()

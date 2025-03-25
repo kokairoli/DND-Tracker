@@ -8,6 +8,8 @@ public class UIController : MonoBehaviour
     [SerializeField] private GameObject turnCounterObject;
     [SerializeField] private GameObject actionTextObject;
     [SerializeField] private GameObject initialActionButtonObject;
+    [SerializeField] private GameObject startButton;
+    [SerializeField] private GameObject addUnitButton;
 
 
 
@@ -36,5 +38,11 @@ public class UIController : MonoBehaviour
     public void SetActionText(Action action)
     {
         actionTextObject.GetComponent<TextMeshProUGUI>().SetText(action.ToString());
+    }
+
+    public void DisableStartBattleAndAddUnitButton()
+    {
+        startButton.SetActive(false);
+        addUnitButton.SetActive(false);
     }
 }

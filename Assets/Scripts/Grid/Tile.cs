@@ -12,5 +12,10 @@ public class Tile : SelectableUnit
         spriteRenderer.color = isOffset ? offsetColor : baseColor;
     }
 
+    public void SetIsSelected(bool value)
+    {
+        isSelected = value;
+    }
+
     
 }

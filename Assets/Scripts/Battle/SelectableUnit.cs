@@ -1,8 +1,7 @@
 using UnityEngine;
 public enum UnitType
 {
-    PLAYER,
-    ENEMY,
+    ACTION_UNIT,
     TILE
 }
 public class SelectableUnit : MonoBehaviour

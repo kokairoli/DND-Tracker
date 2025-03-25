@@ -5,8 +5,8 @@ public class ActionUnit : SelectableUnit
 {
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Color highlightColor;
-    [SerializeField] private UnitType unitType;
     [SerializeField] private Stats stats;
+    private UnitType unitType = UnitType.ACTION_UNIT;
     private int tileX, tileY;
 
     private Color initialColor;
@@ -38,7 +38,7 @@ public class ActionUnit : SelectableUnit
     override protected void OnMouseDown()
     {
         isSelected = true;
-        gridManager.UnitSelected(this.x,this.y,this.unitType);
+        gridManager.UnitSelected(this.tileX,this.tileY,this.unitType);
     }
 
     public override void DisableHighlight()
