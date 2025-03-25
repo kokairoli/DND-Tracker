@@ -152,7 +152,8 @@ MonoBehaviour:
   tilePrefab: {fileID: 871126743574356857, guid: 368e566c0c36c0d48a4be83d6e2f6150, type: 3}
   camera: {fileID: 519420032}
   battleController: {fileID: 1178824211}
-  unitCreationUIController: {fileID: 0}
+  battleSystem: {fileID: 72910387}
+  uiController: {fileID: 1266004833}
 --- !u!4 &28051306
 Transform:
   m_ObjectHideFlags: 0
@@ -2453,8 +2454,8 @@ MonoBehaviour:
   turnCounterObject: {fileID: 1669679449}
   actionTextObject: {fileID: 959795033}
   initialActionButtonObject: {fileID: 713140599}
-  startButton: {fileID: 0}
-  addUnitButton: {fileID: 0}
+  startButton: {fileID: 1987573190}
+  addUnitButton: {fileID: 137067199}
 --- !u!4 &1266004834
 Transform:
   m_ObjectHideFlags: 0
