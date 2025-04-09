@@ -17,5 +17,10 @@ MonoBehaviour:
   range: 120
   isConcentration: 0
   isUpcastable: 0
+  damage:
+  - dice: 3
+    numberOfDice: 1
+    damageType: 4
   cost: 0
   spellPrefab: {fileID: 6196265812829877553, guid: 13867105e3e00c74ebe7e7a86f8766ee, type: 3}
+  speed: 8

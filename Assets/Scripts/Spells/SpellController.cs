@@ -7,12 +7,20 @@ public class SpellController : MonoBehaviour
         selectedSpell = spell;
     }
 
-    public void CastSpell()
+    public void CastSpell(ActionUnit source, object destination)
     {
         if (IsSpellSelected())
         {
-            selectedSpell.CreatePrefabAndAssignSpell();
-            //ClearSelectedSpell();
+            SpellBaseBehaviour spell =  selectedSpell.CreatePrefabAndAssignSpell();
+            if (destination is ActionUnit)
+            {
+                spell.SetSourceAndDestination(source, (ActionUnit)destination);
+            }
+            else if(destination is Tile)
+            {
+                spell.SetSourceAndDestination(source, (Tile)destination);
+            }
+            spell.CastSpell();
         }
         else
         {

@@ -81,7 +81,7 @@ public class BattleController : MonoBehaviour
         if (gridManager.IsInSpellRange(selectedUnit, target,spellController.GetSpellRange()))
         {
             ClearHighLightOfSpell();
-            spellController.CastSpell();
+            spellController.CastSpell(selectedUnit, target);
             ClearUnitSelection();
         }
     }

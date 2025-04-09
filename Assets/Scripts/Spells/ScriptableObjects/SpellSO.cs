@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum DamageType
@@ -18,6 +19,7 @@ public enum DamageType
     Radiant
 }
 
+[System.Serializable]
 public struct Damage
 {
     public DiceType dice;
@@ -33,19 +35,38 @@ public class SpellSO : ScriptableObject
     [SerializeField] protected int range;
     [SerializeField] protected bool isConcentration;
     [SerializeField] protected bool isUpcastable;
-    [SerializeField] protected Damage[] damage;
+    [SerializeField] protected List<Damage> damage;
     [SerializeField] protected CostType cost;
     [SerializeField] SpellBaseBehaviour spellPrefab;
+    [SerializeField] float speed;
 
 
-    public void CreatePrefabAndAssignSpell()
+    public SpellBaseBehaviour CreatePrefabAndAssignSpell()
     {
         SpellBaseBehaviour spell = Instantiate(spellPrefab);
         spell.SetSpellData(this);
-        spell.CastSpell();
+        return spell;
     }
     public int GetSpellRange()
     {
         return range;
+    }
+
+    public int GetDamage()
+    {
+        int damage = 0;
+        for (int i = 0; i < this.damage.Count; i++)
+        {
+            for (int j = 0; j < this.damage[i].numberOfDice; j++)
+            {
+                damage += DiceController.RollDice(this.damage[i].dice, 0);
+            }
+        }
+        return damage;
+    }
+
+    public float GetSpeed()
+    {
+        return speed;
     }
 }
