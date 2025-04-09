@@ -10,6 +10,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private GameObject initialActionButtonObject;
     [SerializeField] private GameObject startButton;
     [SerializeField] private GameObject addUnitButton;
+    [SerializeField] private GameObject spellPanel;
 
 
 
@@ -17,6 +18,7 @@ public class UIController : MonoBehaviour
     {
         Debug.Log(initialActionButtonObject.GetComponent<Button>());
         initialActionButtonObject.GetComponent<Button>().Select();
+        CloseSpellPanel();
     }
 
     public void CreateFloatingText(Vector3 position, string text)
@@ -25,9 +27,18 @@ public class UIController : MonoBehaviour
         {
             GameObject floatingText = Instantiate(floatingTextPrefab, position, Quaternion.identity);
             floatingText.GetComponentInChildren<TextMeshPro>().SetText(text);
-            
         }
         
+    }
+
+    public void OpenSpellPanel()
+    {
+        spellPanel.SetActive(true);
+    }
+
+    public void CloseSpellPanel()
+    {
+        spellPanel.SetActive(false);
     }
 
     public void SetTurnCounter(int turn)

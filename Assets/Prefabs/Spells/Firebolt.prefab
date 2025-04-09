@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spell: {fileID: 11400000, guid: 10055a7e6d96d544ab0bf23e005b9cab, type: 2}
+  battleController: {fileID: 0}
 --- !u!1 &9146730147052134599
 GameObject:
   m_ObjectHideFlags: 0

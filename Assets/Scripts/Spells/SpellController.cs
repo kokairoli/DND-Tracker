@@ -1,12 +1,18 @@
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+
 public class SpellController : MonoBehaviour
 {
-    [SerializeField] private SpellSO selectedSpell;
+    private SpellSO selectedSpell;
+    [SerializeField] private UIController uiController;
+    [SerializeField] private BattleController battleController;
     public void SetSelectedSpell(SpellSO spell)
     {
         selectedSpell = spell;
+        battleController.HighLightSpellRangeArea(spell.GetSpellRange());
+        uiController.CloseSpellPanel();
     }
-
     public void CastSpell(ActionUnit source, object destination)
     {
         if (IsSpellSelected())
@@ -21,6 +27,7 @@ public class SpellController : MonoBehaviour
                 spell.SetSourceAndDestination(source, (Tile)destination);
             }
             spell.CastSpell();
+            battleController.ClearHighLightOfSpell(selectedSpell.GetSpellRange());
         }
         else
         {

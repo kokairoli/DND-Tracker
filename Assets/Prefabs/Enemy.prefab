@@ -471,6 +471,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 1202823850906501554}
   highlightColor: {r: 1, g: 1, b: 0, a: 1}
   stats: {fileID: 5646796502623204650}
+  spells: []
 --- !u!212 &1202823850906501554
 SpriteRenderer:
   m_ObjectHideFlags: 0
