@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ public class ActionUnit : SelectableUnit
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Color highlightColor;
     [SerializeField] private Stats stats;
+    [SerializeField] private List<SpellSO> spells;
     private UnitType unitType = UnitType.ACTION_UNIT;
     private int tileX, tileY;
 

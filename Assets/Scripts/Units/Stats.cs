@@ -1,5 +1,10 @@
 using UnityEngine;
 
+public enum CostType
+{
+    ACTION,
+    BONUS_ACTION
+}
 struct Resources
 {
     int maxActionPoints;

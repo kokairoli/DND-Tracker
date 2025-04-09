@@ -6,6 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 public enum Action
 {
     INSPECT,
+    SPELL,
     MOVE,
     ATTACK
 }
@@ -13,6 +14,7 @@ public class BattleController : MonoBehaviour
 {
     [SerializeField] private GridManager gridManager;
     [SerializeField] private UIController uiController;
+    [SerializeField] private SpellController spellController;
     private ActionUnit selectedUnit;
     private Tile destinationTile;
     private ActionUnit destinationUnit;
@@ -51,6 +53,9 @@ public class BattleController : MonoBehaviour
             case Action.ATTACK:
                 AttackTarget(unit);
                 break;
+            case Action.SPELL:
+                Debug.Log("Casting spell...");
+                break;
         }
         
     }
@@ -68,6 +73,14 @@ public class BattleController : MonoBehaviour
             //Ide a logika jön, hogy mi történjen, ha két egység van kijelölve
             selectedUnit.Attack(destinationUnit);
             ClearUnitSelection();
+        }
+    }
+
+    private void castSpell(ActionUnit target)
+    {
+        if (gridManager.IsInSpellRange(selectedUnit, target,spellController.GetSpellRange()))
+        {
+            
         }
     }
 

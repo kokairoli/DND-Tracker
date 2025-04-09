@@ -138,6 +138,11 @@ public class GridManager : MonoBehaviour
         return CalculateDistance(start.GetTileX(), start.GetTileY(), destiantion.GetTileX(), destiantion.GetTileY()) <= start.GetAttackRange();
     }
 
+    public bool IsInSpellRange(ActionUnit start, ActionUnit destiantion, int spellRange)
+    {
+        return CalculateDistance(start.GetTileX(), start.GetTileY(), destiantion.GetTileX(), destiantion.GetTileY()) <= spellRange;
+    }
+
     public int CalculateDistance(int startX, int startY, int destX, int destY)
     {
         double distance = Math.Sqrt(Math.Pow(destX - startX, 2) + Math.Pow(destY - startY, 2));
