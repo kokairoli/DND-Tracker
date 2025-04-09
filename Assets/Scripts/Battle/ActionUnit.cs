@@ -78,7 +78,6 @@ public class ActionUnit : SelectableUnit
     public int GetTileY() {
         return tileY;
     }
-
     public void Attack(ActionUnit target)
     {
         target.TakeDamage(stats.GetAttackPower());

@@ -1,7 +1,7 @@
 using UnityEngine;
 public class SpellController : MonoBehaviour
 {
-    private SpellSO selectedSpell;
+    [SerializeField] private SpellSO selectedSpell;
     public void SetSelectedSpell(SpellSO spell)
     {
         selectedSpell = spell;
@@ -11,8 +11,8 @@ public class SpellController : MonoBehaviour
     {
         if (IsSpellSelected())
         {
-            selectedSpell.CastSpell();
-            ClearSelectedSpell();
+            selectedSpell.CreatePrefabAndAssignSpell();
+            //ClearSelectedSpell();
         }
         else
         {

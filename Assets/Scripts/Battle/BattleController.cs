@@ -54,7 +54,7 @@ public class BattleController : MonoBehaviour
                 AttackTarget(unit);
                 break;
             case Action.SPELL:
-                Debug.Log("Casting spell...");
+                castSpell(unit);
                 break;
         }
         
@@ -80,7 +80,9 @@ public class BattleController : MonoBehaviour
     {
         if (gridManager.IsInSpellRange(selectedUnit, target,spellController.GetSpellRange()))
         {
-            
+            ClearHighLightOfSpell();
+            spellController.CastSpell();
+            ClearUnitSelection();
         }
     }
 
@@ -143,34 +145,35 @@ public class BattleController : MonoBehaviour
 
     public void SetAttackAction()
     {
-        ClearAllHighlightedArea();
-        ClearTileSelection();
-        ClearUnitSelection();
-        currentAction = Action.ATTACK;
-        UpdateCurrentActionToText();
+        ActionClicked(Action.ATTACK);
         HighLightAttackableArea();
     }
 
     public void SetMoveAction()
     {
-        ClearAllHighlightedArea();
-        ClearTileSelection();
-        ClearUnitSelection();
-        currentAction = Action.MOVE;
-        UpdateCurrentActionToText();
+        ActionClicked(Action.MOVE);
         HighLightMoveableArea();
         
     }
 
     public void SetInspectAction()
     {
+        ActionClicked(Action.INSPECT);
+    }
+
+    public void SetSpellAction()
+    {
+        ActionClicked(Action.SPELL);
+        HighLightSpelRangeArea();
+    }
+
+    private void ActionClicked(Action action)
+    {
         ClearAllHighlightedArea();
         ClearTileSelection();
         ClearUnitSelection();
-        currentAction = Action.INSPECT;
+        currentAction = action;
         UpdateCurrentActionToText();
-
-
     }
 
     public void ResetSelectedUnitResources()
@@ -193,6 +196,11 @@ public class BattleController : MonoBehaviour
         gridManager.HighLightMoveableArea(selectedUnit.GetTileX(), selectedUnit.GetTileY(), selectedUnit.GetAttackRange());
     }
 
+    private void HighLightSpelRangeArea()
+    {
+        gridManager.HighLightMoveableArea(selectedUnit.GetTileX(), selectedUnit.GetTileY(), spellController.GetSpellRange());
+    }
+
     private void ClearHighLightOfMoveableArea()
     {
         gridManager.ClearAllHighlightedArea(selectedUnit.GetTileX(), selectedUnit.GetTileY(), selectedUnit.getMovement());
@@ -201,6 +209,11 @@ public class BattleController : MonoBehaviour
     private void ClearHighLightOfAttackableArea()
     {
         gridManager.ClearAllHighlightedArea(selectedUnit.GetTileX(), selectedUnit.GetTileY(), selectedUnit.GetAttackRange());
+    }
+
+    private void ClearHighLightOfSpell()
+    {
+        gridManager.ClearAllHighlightedArea(selectedUnit.GetTileX(), selectedUnit.GetTileY(), spellController.GetSpellRange());
     }
 
     public void ClearAllHighlightedArea()

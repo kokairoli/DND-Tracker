@@ -19,6 +19,11 @@ public class UnitCreationUIController : MonoBehaviour
         DisableUnitCreationWindow();
     }
 
+    public bool IsPrefabSelected()
+    {
+        return selectedPrefab != null;
+    }
+
 
     public GameObject GetSelectedPrefab()
     {

@@ -86,9 +86,10 @@ public class GridManager : MonoBehaviour
                 }
             case UnitType.TILE:
                 {
-                    if (battleSystem.GetBattleState() == BattleState.PREPARE)
+                    UnitCreationUIController unitCreator = uiController.GetComponent<UnitCreationUIController>();
+                    if (battleSystem.GetBattleState() == BattleState.PREPARE && unitCreator.IsPrefabSelected())
                     {
-                        GameObject unit = Instantiate(uiController.GetComponent<UnitCreationUIController>().GetSelectedPrefab());
+                        GameObject unit = Instantiate(unitCreator.GetSelectedPrefab());
                         PlaceUnitOnMap(x, y, unit);
                     }
                     else

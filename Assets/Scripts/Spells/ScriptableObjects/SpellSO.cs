@@ -25,6 +25,7 @@ public struct Damage
     public DamageType damageType;
 }
 
+[CreateAssetMenu(fileName = "New Spell", menuName = "SpellSO", order = 1)]
 public class SpellSO : ScriptableObject
 {
     [SerializeField] protected string spellName;
@@ -34,13 +35,15 @@ public class SpellSO : ScriptableObject
     [SerializeField] protected bool isUpcastable;
     [SerializeField] protected Damage[] damage;
     [SerializeField] protected CostType cost;
-    [SerializeField] GameObject spellPrefab;
+    [SerializeField] SpellBaseBehaviour spellPrefab;
 
-    public void CastSpell()
+
+    public void CreatePrefabAndAssignSpell()
     {
-        Debug.Log("I cast a spell");
+        SpellBaseBehaviour spell = Instantiate(spellPrefab);
+        spell.SetSpellData(this);
+        spell.CastSpell();
     }
-
     public int GetSpellRange()
     {
         return range;
