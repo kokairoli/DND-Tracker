@@ -46,6 +46,8 @@ public class BattleSystem : MonoBehaviour
             
         }
 
+        uiController.OpenActionPanel();
+
         CommenceBattle();
     }
 

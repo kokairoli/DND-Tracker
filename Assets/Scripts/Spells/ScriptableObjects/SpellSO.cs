@@ -69,4 +69,9 @@ public class SpellSO : ScriptableObject
     {
         return speed;
     }
+
+    public CostType GetCost()
+    {
+        return cost;
+    }
 }

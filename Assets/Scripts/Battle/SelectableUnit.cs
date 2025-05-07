@@ -6,7 +6,7 @@ public enum UnitType
 }
 public class SelectableUnit : MonoBehaviour
 {
-    [SerializeField] private GameObject highlight;
+    [SerializeField] protected GameObject highlight;
     static protected GridManager gridManager;
     protected bool isSelected;
     public int x, y;

@@ -72,6 +72,7 @@ public class BattleController : MonoBehaviour
             ClearHighLightOfAttackableArea();
             //Ide a logika jön, hogy mi történjen, ha két egység van kijelölve
             selectedUnit.Attack(destinationUnit);
+            uiController.UpdateResourcesPanel(selectedUnit.GetStats().SubstractCost(CostType.ACTION));
             ClearUnitSelection();
         }
     }
@@ -88,7 +89,7 @@ public class BattleController : MonoBehaviour
 
     private void MoveToTile(Tile target)
     {
-        if (gridManager.IsInReachDistance(selectedUnit, target))
+        if (gridManager.IsTileInReachDistance(target))
         {
             //Mozgás a kijelölt egységhez
             destinationTile = target;
@@ -96,8 +97,9 @@ public class BattleController : MonoBehaviour
             int distance = gridManager.CalculateDistance(selectedUnit.GetTileX(), selectedUnit.GetTileY(), destinationTile.x, destinationTile.y);
             selectedUnit.Move(new Vector3(target.transform.position.x, target.transform.position.y, 0), destinationTile.x, destinationTile.y);
             selectedUnit.SubstractDistanceFromMovement(distance);
-            HighLightMoveableArea();
+            //HighLightMoveableArea();
             ClearTileSelection();
+            gridManager.CalculateAvailablePathsFromStart(selectedUnit.GetTileX(), selectedUnit.GetTileY(), selectedUnit.getMovement());
         }
         else
         {
@@ -141,6 +143,8 @@ public class BattleController : MonoBehaviour
         }
         selectedUnit = unit;
         selectedUnit.Select();
+        uiController.UpdateResourcesPanel(selectedUnit.GetStats().GetResources());
+        gridManager.CalculateAvailablePathsFromStart(selectedUnit.GetTileX(), selectedUnit.GetTileY(), selectedUnit.getMovement());
     }
 
     public void SetAttackAction()
@@ -152,7 +156,6 @@ public class BattleController : MonoBehaviour
     public void SetMoveAction()
     {
         ActionClicked(Action.MOVE);
-        HighLightMoveableArea();
         
     }
 
@@ -186,10 +189,7 @@ public class BattleController : MonoBehaviour
         uiController.CreateFloatingText(new Vector3(selectedUnit.transform.position.x, selectedUnit.transform.position.y,-1),text);
     }
 
-    private void HighLightMoveableArea()
-    {
-        gridManager.HighLightMoveableArea(selectedUnit.GetTileX(), selectedUnit.GetTileY(), selectedUnit.getMovement());
-    }
+    
 
     private void HighLightAttackableArea()
     {
@@ -203,17 +203,17 @@ public class BattleController : MonoBehaviour
 
     private void ClearHighLightOfMoveableArea()
     {
-        gridManager.ClearAllHighlightedArea(selectedUnit.GetTileX(), selectedUnit.GetTileY(), selectedUnit.getMovement());
+        gridManager.ClearAllHighlightedArea();
     }
 
     private void ClearHighLightOfAttackableArea()
     {
-        gridManager.ClearAllHighlightedArea(selectedUnit.GetTileX(), selectedUnit.GetTileY(), selectedUnit.GetAttackRange());
+        gridManager.ClearAllHighlightedArea();
     }
 
     public void ClearHighLightOfSpell(int spellrange)
     {
-        gridManager.ClearAllHighlightedArea(selectedUnit.GetTileX(), selectedUnit.GetTileY(), spellrange);
+        gridManager.ClearAllHighlightedArea();
     }
 
     public void ClearAllHighlightedArea()
@@ -225,6 +225,11 @@ public class BattleController : MonoBehaviour
     private void UpdateCurrentActionToText()
     {
         uiController.SetActionText(currentAction);
+    }
+
+    public Action GetCurrentAction()
+    {
+        return currentAction;
     }
 
 }

@@ -5,7 +5,7 @@ public enum CostType
     ACTION,
     BONUS_ACTION
 }
-struct Resources
+public struct Resources
 {
     int maxActionPoints;
     int maxBonusActionPoints;
@@ -69,8 +69,7 @@ public class Stats : MonoBehaviour
 
     private void Start()
     {
-        resources.MaxMovementPoints = 6;
-        resources.CurrentMovementPoints = 6;
+        InitializeResources();
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
     }
@@ -85,6 +84,17 @@ public class Stats : MonoBehaviour
         }
     }
 
+    private void InitializeResources()
+    {
+        resources.MaxActionPoints = 1;
+        resources.MaxBonusActionPoints = 1;
+        resources.MaxMovementPoints = 6;
+        resources.CurrentMovementPoints = 6;
+        resources.CurrentActionPoints = 1;
+        resources.CurrentBonusActionPoints = 1;
+
+    }
+
     public int GetAttackPower()
     {
         return attackPower;
@@ -93,11 +103,6 @@ public class Stats : MonoBehaviour
     public int GetAttackRange()
     {
         return attackRange;
-    }
-
-    void attack(Stats target)
-    {
-        target.TakeDamage(attackPower);
     }
 
     void heal(int amount)
@@ -113,6 +118,25 @@ public class Stats : MonoBehaviour
     public int GetCurrentMovement()
     {
         return resources.CurrentMovementPoints;
+    }
+
+    public Resources SubstractCost(CostType cost)
+    {
+        switch (cost)
+        {
+            case CostType.ACTION:
+                    resources.CurrentActionPoints--;
+                break;
+            case CostType.BONUS_ACTION:
+                resources.CurrentBonusActionPoints--;
+                break;
+        }
+        return resources;
+    }
+
+    public Resources GetResources()
+    {
+        return resources;
     }
 
     public void ResetResources()

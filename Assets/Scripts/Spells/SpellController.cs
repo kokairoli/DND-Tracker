@@ -27,6 +27,7 @@ public class SpellController : MonoBehaviour
                 spell.SetSourceAndDestination(source, (Tile)destination);
             }
             spell.CastSpell();
+            uiController.UpdateResourcesPanel(source.GetStats().SubstractCost(selectedSpell.GetCost()));
             battleController.ClearHighLightOfSpell(selectedSpell.GetSpellRange());
         }
         else

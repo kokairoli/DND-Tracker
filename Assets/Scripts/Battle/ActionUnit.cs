@@ -1,6 +1,17 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
+
+public enum ANIMATION
+{
+    IDLE,
+    ATTACK,
+    MOVE,
+    CAST_SPELL
+
+}
 
 public class ActionUnit : SelectableUnit
 {
@@ -8,8 +19,19 @@ public class ActionUnit : SelectableUnit
     [SerializeField] private Color highlightColor;
     [SerializeField] private Stats stats;
     [SerializeField] private List<SpellSO> spells;
+    [SerializeField] private Animator animator;
     private UnitType unitType = UnitType.ACTION_UNIT;
     private int tileX, tileY;
+
+    //Animations dictionary
+    private Dictionary<ANIMATION, string> animationsDictionary = new Dictionary<ANIMATION, string>
+    {
+        { ANIMATION.IDLE,"idle"},
+        { ANIMATION.ATTACK,"attack"},
+        { ANIMATION.MOVE,"move"},
+        { ANIMATION.CAST_SPELL,"cast_spell"}
+
+    };
 
     private Color initialColor;
 
@@ -80,7 +102,8 @@ public class ActionUnit : SelectableUnit
     }
     public void Attack(ActionUnit target)
     {
-        target.TakeDamage(stats.GetAttackPower());
+        PlayAnimation(ANIMATION.ATTACK);
+        StartCoroutine(TakeDamageAfterAnimation(target));
     }
 
     public void TakeDamage(int damage)
@@ -106,6 +129,23 @@ public class ActionUnit : SelectableUnit
     public void ResetResources()
     {
         stats.ResetResources();
+    }
+
+    public void PlayAnimation(ANIMATION animation)
+    {
+        animator.Play(animationsDictionary[animation]);
+    }
+
+    IEnumerator TakeDamageAfterAnimation(ActionUnit target)
+    {
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        yield return new WaitForSeconds(stateInfo.length-0.1f);
+        target.TakeDamage(stats.GetAttackPower());
+    }
+
+    public Stats GetStats()
+    {
+        return stats;
     }
 
     public int GetAttackRange()

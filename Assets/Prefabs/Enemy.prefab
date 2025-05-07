@@ -369,6 +369,7 @@ GameObject:
   - component: {fileID: 5646796502623204650}
   - component: {fileID: 7625382165543775650}
   - component: {fileID: 1202823850906501554}
+  - component: {fileID: 3036412549322492272}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -472,6 +473,7 @@ MonoBehaviour:
   highlightColor: {r: 1, g: 1, b: 0, a: 1}
   stats: {fileID: 5646796502623204650}
   spells: []
+  animator: {fileID: 3036412549322492272}
 --- !u!212 &1202823850906501554
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -527,6 +529,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &3036412549322492272
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6416817775596085650}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 53996ee5d5cd9fa4abf5e762cd73be4d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8886451192835201432
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using NUnit.Framework.Internal;
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -14,7 +15,8 @@ public class GridManager : MonoBehaviour
 
 
     private List<GameObject> unitsOnMap = new List<GameObject>();
-
+    private Dictionary<(int, int), int> currentPaths;
+    private Dictionary<(int, int), (int, int)> currentpredecessors;
     private const float tileSize = 1.0f;
 
     private Tile[][] map;
@@ -40,7 +42,7 @@ public class GridManager : MonoBehaviour
 
                 bool isOffset = (x % 2 == 0 && y%2!=0) || (x % 2 != 0 && y % 2 == 0);
                 spawnedTile.Init(isOffset);
-
+                spawnedTile.SetMovementCost(1);
                 map[x][y] = spawnedTile;
                 spawnedTile.SetPosition(x, y);
             }
@@ -102,6 +104,28 @@ public class GridManager : MonoBehaviour
         
     }
 
+    public void CalculateAvailablePathsFromStart(int x, int y, int movement)
+    {
+        var (shortestPaths, predecessors) = PathFinding.FindShortestPaths(map, map[x][y], movement);
+        this.currentPaths = shortestPaths;
+        this.currentpredecessors = predecessors;
+    }
+
+    public void HighLightPathToDestination(int destX,int destY) {
+        if (battleController.GetCurrentAction() == Action.MOVE && currentPaths.ContainsKey((destX, destY)))
+        {
+            var path = PathFinding.GetPath(currentpredecessors, (destX, destY));
+            foreach (var tile in path)
+            {
+                map[tile.Item1][tile.Item2].HighLight();
+            }
+        }
+        else
+        {
+            map[destX][destY].HighLight();
+        }
+    }
+
     public void AddPreparedUnitsToBattleSystem()
     {
         battleSystem.PrepareAndDecideTurnOrder(unitsOnMap);
@@ -118,20 +142,28 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public void ClearAllHighlightedArea(int x, int y, int movePoints)
+    public void ClearAllHighlightedArea()
     {
-        for (int i = x - movePoints < 0 ? 0 : x - movePoints; i <= x + movePoints && i < _width; i++)
+        for (int i = 0; i < map.Length; i++)
         {
-            for (int j = y - movePoints < 0 ? 0 : y - movePoints; j <= y + movePoints && j < _height; j++)
+            for (global::System.Int32 j = 0; j < map[0].Length; j++)
             {
-                map[i][j].DisableHighlight();
+                map[i][j].ClearHighlight();
             }
         }
     }
 
-    public bool IsInReachDistance(ActionUnit start,SelectableUnit destiantion)
+    public void ClearAllHighlightedAreaOnTileMouse()
     {
-        return CalculateDistance(start.GetTileX(), start.GetTileY(), destiantion.x, destiantion.y) <= start.getMovement();
+        if (battleController.GetCurrentAction() == Action.MOVE)
+        {
+            ClearAllHighlightedArea();
+        }
+    }
+
+    public bool IsTileInReachDistance(Tile destiantion)
+    {
+        return currentPaths.ContainsKey((destiantion.x, destiantion.y));
     }
 
     public bool IsInAttackRange(ActionUnit start, ActionUnit destiantion)

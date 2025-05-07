@@ -11,6 +11,10 @@ public class UIController : MonoBehaviour
     [SerializeField] private GameObject startButton;
     [SerializeField] private GameObject addUnitButton;
     [SerializeField] private GameObject spellPanel;
+    [SerializeField] private GameObject actionPanel;
+    [SerializeField] private GameObject bonusActionPanel;
+    [SerializeField] private GameObject actionPrefab;
+    [SerializeField] private GameObject bonusActionPrefab;
 
 
 
@@ -18,7 +22,6 @@ public class UIController : MonoBehaviour
     {
         Debug.Log(initialActionButtonObject.GetComponent<Button>());
         initialActionButtonObject.GetComponent<Button>().Select();
-        CloseSpellPanel();
     }
 
     public void CreateFloatingText(Vector3 position, string text)
@@ -31,6 +34,30 @@ public class UIController : MonoBehaviour
         
     }
 
+    public void UpdateResourcesPanel(Resources resources)
+    {
+        foreach (Transform child in actionPanel.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in bonusActionPanel.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        for (int i = 0; i < resources.CurrentActionPoints; i++)
+        {
+            GameObject actionImage = Instantiate(actionPrefab);
+            actionImage.transform.parent = actionPanel.transform;
+        }
+        for (int i = 0; i < resources.CurrentBonusActionPoints; i++)
+        {
+            GameObject actionImage = Instantiate(bonusActionPrefab);
+            actionImage.transform.parent = bonusActionPanel.transform;
+        }
+    }
+
+    
+
     public void OpenSpellPanel()
     {
         spellPanel.SetActive(true);
@@ -39,6 +66,16 @@ public class UIController : MonoBehaviour
     public void CloseSpellPanel()
     {
         spellPanel.SetActive(false);
+    }
+
+    public void CloseActionPanel()
+    {
+        actionPanel.SetActive(false);
+    }
+
+    public void OpenActionPanel()
+    {
+        actionPanel.SetActive(true);
     }
 
     public void SetTurnCounter(int turn)
