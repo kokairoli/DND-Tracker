@@ -27,6 +27,16 @@ public class SpellBaseBehaviour : MonoBehaviour
     {
         spellData = spellSO;
     }
+
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void Show()
+    {
+        gameObject.SetActive(true);
+    }
     public virtual void CastSpell()
     {
 

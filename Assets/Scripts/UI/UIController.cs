@@ -52,7 +52,7 @@ public class UIController : MonoBehaviour
         for (int i = 0; i < resources.CurrentBonusActionPoints; i++)
         {
             GameObject actionImage = Instantiate(bonusActionPrefab);
-            actionImage.transform.parent = bonusActionPanel.transform;
+            actionImage.transform.SetParent(bonusActionPanel.transform);
         }
     }
 

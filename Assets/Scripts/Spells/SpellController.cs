@@ -1,6 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class SpellController : MonoBehaviour
 {
@@ -18,6 +21,7 @@ public class SpellController : MonoBehaviour
         if (IsSpellSelected())
         {
             SpellBaseBehaviour spell =  selectedSpell.CreatePrefabAndAssignSpell();
+            spell.Hide();
             if (destination is ActionUnit)
             {
                 spell.SetSourceAndDestination(source, (ActionUnit)destination);
@@ -26,7 +30,9 @@ public class SpellController : MonoBehaviour
             {
                 spell.SetSourceAndDestination(source, (Tile)destination);
             }
-            spell.CastSpell();
+            source.PlayAnimation(ANIMATION.CAST_SPELL);
+            StartCoroutine(CastSpellAfterAnimation(source,spell));
+
             uiController.UpdateResourcesPanel(source.GetStats().SubstractCost(selectedSpell.GetCost()));
             battleController.ClearHighLightOfSpell(selectedSpell.GetSpellRange());
         }
@@ -34,6 +40,14 @@ public class SpellController : MonoBehaviour
         {
             Debug.LogWarning("No spell selected!");
         }
+    }
+
+    IEnumerator CastSpellAfterAnimation(ActionUnit target,SpellBaseBehaviour spell)
+    {
+        AnimatorStateInfo stateInfo = target.animator.GetCurrentAnimatorStateInfo(0);
+        yield return new WaitForSeconds(stateInfo.length - 0.1f);
+        spell.Show();
+        spell.CastSpell();
     }
 
     public void ClearSelectedSpell()

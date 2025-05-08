@@ -19,7 +19,7 @@ public class ActionUnit : SelectableUnit
     [SerializeField] private Color highlightColor;
     [SerializeField] private Stats stats;
     [SerializeField] private List<SpellSO> spells;
-    [SerializeField] private Animator animator;
+    [SerializeField] public Animator animator;
     private UnitType unitType = UnitType.ACTION_UNIT;
     private int tileX, tileY;
 
@@ -29,7 +29,7 @@ public class ActionUnit : SelectableUnit
         { ANIMATION.IDLE,"idle"},
         { ANIMATION.ATTACK,"attack"},
         { ANIMATION.MOVE,"move"},
-        { ANIMATION.CAST_SPELL,"cast_spell"}
+        { ANIMATION.CAST_SPELL,"spell"}
 
     };
 

@@ -27,6 +27,7 @@ public class Tile : SelectableUnit
     public void ClearHighlight()
     {
         highlight.SetActive(false);
+        isSelected = false;
     }
 
     public int GetMovementCost()
