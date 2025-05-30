@@ -147,6 +147,11 @@ public class BattleController : MonoBehaviour
         gridManager.CalculateAvailablePathsFromStart(selectedUnit.GetTileX(), selectedUnit.GetTileY(), selectedUnit.getMovement());
     }
 
+    public ActionUnit GetSelectedUnit()
+    {
+        return selectedUnit;
+    }
+
     public void SetAttackAction()
     {
         ActionClicked(Action.ATTACK);

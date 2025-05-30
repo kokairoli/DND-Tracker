@@ -85,6 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8644108687069461505}
   - component: {fileID: 6736944643128337926}
+  - component: {fileID: 647185811688611897}
   - component: {fileID: 4777047946049258288}
   - component: {fileID: 2696883128683708631}
   - component: {fileID: 3198497731601699074}
@@ -158,6 +159,21 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.69, y: 0.73}
   m_EdgeRadius: 0
+--- !u!114 &647185811688611897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4143625387298293258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 344a1b77707a95f4ba6e84e855e3c0f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items:
+  - {fileID: 11400000, guid: ff138e210d8006c47834fe3d7aadd9c9, type: 2}
+  - {fileID: 11400000, guid: d49a40242ee7c7a41909917f0878e2d0, type: 2}
 --- !u!114 &4777047946049258288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,6 +209,7 @@ MonoBehaviour:
   stats: {fileID: 4777047946049258288}
   spells: []
   animator: {fileID: 6611576269782135566}
+  inventoryHolder: {fileID: 647185811688611897}
 --- !u!212 &3198497731601699074
 SpriteRenderer:
   m_ObjectHideFlags: 0

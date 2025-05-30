@@ -366,6 +366,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8402915914974053298}
   - component: {fileID: 4346990668600702802}
+  - component: {fileID: 7432506956227994526}
   - component: {fileID: 5646796502623204650}
   - component: {fileID: 7625382165543775650}
   - component: {fileID: 1202823850906501554}
@@ -439,6 +440,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.69, y: 0.73}
   m_EdgeRadius: 0
+--- !u!114 &7432506956227994526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6416817775596085650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 344a1b77707a95f4ba6e84e855e3c0f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items: []
 --- !u!114 &5646796502623204650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -474,6 +488,7 @@ MonoBehaviour:
   stats: {fileID: 5646796502623204650}
   spells: []
   animator: {fileID: 3036412549322492272}
+  inventoryHolder: {fileID: 7432506956227994526}
 --- !u!212 &1202823850906501554
 SpriteRenderer:
   m_ObjectHideFlags: 0

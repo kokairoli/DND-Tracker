@@ -15,6 +15,9 @@ public class UIController : MonoBehaviour
     [SerializeField] private GameObject bonusActionPanel;
     [SerializeField] private GameObject actionPrefab;
     [SerializeField] private GameObject bonusActionPrefab;
+    [SerializeField] private GameObject inventoryPanel;
+    [SerializeField] private GameObject darkBackground;
+    [SerializeField] private GameObject availableActionsPanel;
 
 
 
@@ -47,7 +50,7 @@ public class UIController : MonoBehaviour
         for (int i = 0; i < resources.CurrentActionPoints; i++)
         {
             GameObject actionImage = Instantiate(actionPrefab);
-            actionImage.transform.parent = actionPanel.transform;
+            actionImage.transform.SetParent(actionPanel.transform);
         }
         for (int i = 0; i < resources.CurrentBonusActionPoints; i++)
         {
@@ -68,14 +71,26 @@ public class UIController : MonoBehaviour
         spellPanel.SetActive(false);
     }
 
-    public void CloseActionPanel()
+    public void CloseAvailableActionPanel()
     {
-        actionPanel.SetActive(false);
+        availableActionsPanel.SetActive(false);
     }
 
-    public void OpenActionPanel()
+    public void OpenAvailableActionPanel()
     {
-        actionPanel.SetActive(true);
+        availableActionsPanel.SetActive(true);
+    }
+
+    public void OpenInventoryPanel()
+    {
+        inventoryPanel.SetActive(true);
+        darkBackground.SetActive(true);
+    }
+
+    public void CloseInventoryPanel()
+    {
+        inventoryPanel.SetActive(false);
+        darkBackground.SetActive(false);
     }
 
     public void SetTurnCounter(int turn)

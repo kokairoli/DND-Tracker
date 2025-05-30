@@ -3,7 +3,6 @@ using UnityEngine;
 public class SpellBaseBehaviour : MonoBehaviour
 {
     [SerializeField] protected SpellSO spell;
-    [SerializeField] protected BattleController battleController;
 
     protected ActionUnit source;
     protected ActionUnit destination;

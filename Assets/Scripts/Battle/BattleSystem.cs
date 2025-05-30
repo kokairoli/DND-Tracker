@@ -13,6 +13,7 @@ public class BattleSystem : MonoBehaviour
 {
     [SerializeField] BattleController battleController;
     [SerializeField] UIController uiController;
+    [SerializeField] InventoryUIController inventoryUIController;
     public BattleState state;
     private int currentUnitInTurnIndex = 0;
     private int currentTurn = 1;
@@ -46,7 +47,7 @@ public class BattleSystem : MonoBehaviour
             
         }
 
-        uiController.OpenActionPanel();
+        uiController.OpenAvailableActionPanel();
 
         CommenceBattle();
     }
@@ -55,6 +56,7 @@ public class BattleSystem : MonoBehaviour
     {
         ActionUnit unit = units.Values[currentUnitInTurnIndex];
         battleController.SetSelectedUnit(unit);
+        inventoryUIController.CreateInventory(unit.GetInventory());
     }
 
     public void EndTurn()
@@ -74,6 +76,7 @@ public class BattleSystem : MonoBehaviour
         battleController.ClearTileSelection();
         battleController.ResetSelectedUnitResources();
         battleController.SetInspectAction();
+        inventoryUIController.FlushInventory();
         CommenceBattle();
     }
 

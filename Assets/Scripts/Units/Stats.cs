@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum CostType
@@ -84,6 +85,17 @@ public class Stats : MonoBehaviour
         }
     }
 
+    public void Heal(int amount)
+    {
+        currentHealth += Math.Min(amount + currentHealth,maxHealth);
+        healthBar.SetHealth(currentHealth);
+    }
+
+    public void ResetActions()
+    {
+        resources.CurrentActionPoints = resources.MaxActionPoints;
+    }
+
     private void InitializeResources()
     {
         resources.MaxActionPoints = 1;
@@ -125,7 +137,7 @@ public class Stats : MonoBehaviour
         switch (cost)
         {
             case CostType.ACTION:
-                    resources.CurrentActionPoints--;
+                resources.CurrentActionPoints--;
                 break;
             case CostType.BONUS_ACTION:
                 resources.CurrentBonusActionPoints--;

@@ -20,6 +20,7 @@ public class ActionUnit : SelectableUnit
     [SerializeField] private Stats stats;
     [SerializeField] private List<SpellSO> spells;
     [SerializeField] public Animator animator;
+    [SerializeField] private InventoryHolder inventoryHolder;
     private UnitType unitType = UnitType.ACTION_UNIT;
     private int tileX, tileY;
 
@@ -111,6 +112,17 @@ public class ActionUnit : SelectableUnit
         stats.TakeDamage(damage);
     }
 
+    public void Heal(int amount)
+    {
+        stats.Heal(amount);
+    }
+
+    public void ResetActions()
+    {
+        stats.ResetActions();
+    }
+
+
     public int RollInitiative()
     {
         return DiceController.RollDice(DiceType.D20);
@@ -119,6 +131,16 @@ public class ActionUnit : SelectableUnit
     public int getMovement()
     {
         return stats.GetCurrentMovement();
+    }
+
+    public List<ItemSO> GetInventory()
+    {
+        return inventoryHolder.GetItems();
+    }
+
+    public int ItemUsed(ItemSO item)
+    {
+        return inventoryHolder.SubstractItemCount(item);
     }
 
     public void SubstractDistanceFromMovement(int distance)
